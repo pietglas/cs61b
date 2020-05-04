@@ -1,4 +1,6 @@
-public class Deque<T> {
+package project1;
+
+public interface Deque<T> {
 	public void addFirst(T item);
 	public void addLast(T item);
 	default public boolean isEmpty() {

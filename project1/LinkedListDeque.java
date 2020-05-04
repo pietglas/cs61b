@@ -1,6 +1,6 @@
-import java.io.Deque;
+package project1;
 
-public class LinkedListDeque implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
 	private class ListNode {
 		public ListNode() {}
 		public ListNode(T item, ListNode prev, ListNode next) {
@@ -21,10 +21,9 @@ public class LinkedListDeque implements Deque<T> {
 	}
 
 	/** Adds item to front of the deque */
-	@Override
 	public void addFirst(T item) {
 		sentinel_.next_.prev_ = new ListNode(item, sentinel_, sentinel_.next_);
-		sentinel_next_ = sentinel_.next_.prev_;
+		sentinel_.next_ = sentinel_.next_.prev_;
 		if (size_ == 0) {
 			sentinel_.prev_ = sentinel_.next_;
 		}
@@ -32,7 +31,6 @@ public class LinkedListDeque implements Deque<T> {
 	}
 
 	/** adds item to the bakc of the deque */
-	@Override
 	public void addLast(T item) {
 		if (size_ == 0)
 			addFirst(item);
@@ -44,13 +42,11 @@ public class LinkedListDeque implements Deque<T> {
 	}
 
 	/** returns the size of the deque */
-	@Override
 	public int size() {
 		return size_;
 	}
 
 	/** prints the deque */
-	@Override
 	public void printDeque() {
 		ListNode node = sentinel_.next_;
 		for (int pos = 0; pos != size_; pos++) {
@@ -61,7 +57,6 @@ public class LinkedListDeque implements Deque<T> {
 
 	/** removes the first item from the deque and returns it. Returns
 	null if the deque is empty. */
-	@Override
 	public T removeFirst() {
 		T data = sentinel_.next_.item_;
 		sentinel_.next_ = sentinel_.next_.next_;
@@ -72,7 +67,6 @@ public class LinkedListDeque implements Deque<T> {
 
 	/** removes the last item from the deque and returns it.Returns
 	null if the deque is empty. */
-	@Override
 	public T removeLast() {
 		T data = sentinel_.prev_.item_;
 		sentinel_.prev_ = sentinel_.prev_.prev_;
@@ -83,7 +77,6 @@ public class LinkedListDeque implements Deque<T> {
 
 	/** returns the item at index in the deque.Returns
 	null if the deque is empty. */
-	@Override
 	public T get(int index) {
 		if (size_ == 0)
 			return null;
@@ -103,14 +96,12 @@ public class LinkedListDeque implements Deque<T> {
 
 	/** returns the first item from the deque.Returns
 	null if the deque is empty. */
-	@Override
 	public T getFirst() {
 		return get(0);
 	}
 
 	/** returns the last item from the deque. Returns
 	null if the deque is empty. */
-	@Override
 	public T getLast() {
 		return get(size_ - 1);
 	}

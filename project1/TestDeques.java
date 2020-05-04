@@ -1,12 +1,11 @@
-import java.io.Deque;
-import java.io.LinkedListDeque;
+package project1;
 
-import org.junit.Assert.assertEquals;
-import org.junit.Assert.assertNull;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class TestDeques {
 	public static void main(String[] args) {
-		Deque<int> deque = new LinkedListDeque<int>();
+		Deque<int> deque = new LinkedListDeque<>();
 		deque.addFirst(1);
 		deque.addLast(2);
 		assertEquels(1, deque.getFirst());
