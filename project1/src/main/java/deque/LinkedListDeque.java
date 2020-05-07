@@ -1,4 +1,4 @@
-package project1;
+package deque;
 
 public class LinkedListDeque<T> implements Deque<T> {
 	private class ListNode {
