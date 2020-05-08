@@ -1,5 +1,7 @@
 package deque;
 
+import java.lang.*;
+
 public class LinkedListDeque<T> implements Deque<T> {
 	private class ListNode {
 		public ListNode() {}
@@ -13,11 +15,43 @@ public class LinkedListDeque<T> implements Deque<T> {
 		public ListNode next_;
 	}
 
+	/** constructs an empty deque */
 	public LinkedListDeque() {
 		sentinel_ = new ListNode();
 		sentinel_.prev_ = sentinel_;
 		sentinel_.next_ = sentinel_;
 		size_ = 0;
+	}
+
+	/** Constructs a deque of size `size`, with all entries set to `item` */
+	public LinkedListDeque(T item, int size) {
+		sentinel_ = new ListNode();
+		sentinel_.prev_ = sentinel_;
+		sentinel_.next_ = sentinel_;
+		size_ = 0;
+		for (int pos = 0; pos != size; pos++) {
+			sentinel_.next_.prev_ = new ListNode(item, sentinel_, sentinel_.next_);
+			sentinel_.next_ = sentinel_.next_.prev_;
+			++size_;
+		}
+	}
+
+	/** Copy constructor */
+	public LinkedListDeque(LinkedListDeque<T> other) {
+		sentinel_ = new ListNode();
+		sentinel_.prev_ = sentinel_;
+		sentinel_.next_ = sentinel_;
+		size_ = 0;
+		ListNode node = sentinel_;
+		ListNode other_node = other.sentinel();
+		// copy the nodes of other. 
+		for (int pos = 0; pos != other.size(); pos++) {
+			other_node = other_node.next_;
+			node.next_ = new ListNode(other_node.item_, other_node.prev_,
+										other_node.next_);
+			node = node.next_;
+			++size_;
+		}
 	}
 
 	/** Adds item to front of the deque */
@@ -108,4 +142,7 @@ public class LinkedListDeque<T> implements Deque<T> {
 	
 	private int size_;
 	private ListNode sentinel_;
+	private ListNode sentinel() {
+		return sentinel_;
+	}
 }
