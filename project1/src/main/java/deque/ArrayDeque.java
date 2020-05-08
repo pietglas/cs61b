@@ -46,7 +46,7 @@ public class ArrayDeque<T> implements Deque<T> {
 			upscale();
 		array_[pos_end_] = item;
 		++pos_end_;
-
+		++size_;
 	}
 
 	public int size() {
@@ -89,6 +89,10 @@ public class ArrayDeque<T> implements Deque<T> {
 	public T getLast() {
 		T item = array_[pos_end_ - 1];
 		return item;
+	}
+
+	public int underlying_size() {
+		return underlying_size_;
 	}
 
 	private T[] array_;		// usage factor at least 25%

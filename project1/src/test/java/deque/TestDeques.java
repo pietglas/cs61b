@@ -33,4 +33,25 @@ public class TestDeques {
 		deq.removeLast();
 		assertEquals(a, deq.getLast());
 	}
+
+	ArrayDeque<String> arr = new ArrayDeque<>("hoi", 10);
+	@Test 
+	public void checkArray() {
+		for (int i = 0; i != 10; i++)
+			assertEquals("hoi", arr.get(i));
+	}
+
+	ArrayDeque<String> newarr = new ArrayDeque<>(arr);
+	@Test
+	public void checkCopy() {
+		for (int i = 0; i != 10; i++)
+			newarr.addLast("inner peace");
+		assertEquals(20, newarr.size());
+		assertEquals(40, newarr.underlying_size());
+		for (int i = 0; i != 11; i++)
+			newarr.removeLast();
+		assertEquals(9, newarr.size());
+		assertEquals(20, newarr.underlying_size());
+	}
+
 }
