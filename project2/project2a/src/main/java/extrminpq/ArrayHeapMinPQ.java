@@ -4,38 +4,41 @@ class ArrayHeapMinPQ<T> {
 	public ArrayHeapMinPQ() {
 		array_ = (T[]) new Object[8];
 		size_ = 0;
-		pos_first_ = 2;
-		pos_last_ = 3;
 	}
 
 	public ArrayHeapMinPQ(ArrayHeapMinPQ<T> other) {
-		System.arraycopy(other.array_, other.pos_first_, 
-			array_, other.pos_first_, other.size_);
+		System.arraycopy(other.array_, 0, array_, 0, other.size_);
 		size_ = other.size_;
-		pos_first_ = other.pos_first_;
-		pos_last_ = other.pos_last_;
 	}
 
+	/** checks whether an item is in the priority queue */
 	public boolean contains(T item) {
-		return containsHelper(item, pos_first_);
+		return containsHelper(item, 0);
 	}
 
+	/** add an item to the priority queue */
 	public void add(T item) {
-		array_[pos_last_] = item;
-		pos_last_++;
-		size_++;
-		pushUp(pos_last_ - 1);		
+		if (size_ == silent_size_)
+			scale();
+		array_[size_] = item;
+		pushUp(size_);	// heapify 
+		size_++;		
 	}
 
+	/** returns the current smallest item in the priority queue */
 	public T getSmallest() {
-		return array_[pos_first_];
+		return array_[0];
 	}
 
+	/** removes the smallest element and returns it */
 	public T removeSmallest() {
 		T first = getSmallest();
-		pos_last_--;
-		array_[0] = array_[pos_last_];
-		pushDown(0);
+		size_--;
+		array_[0] = array_[size_];
+		pushDown(0);	// heapify 
+		if (size_ < silent_size_ / 4)
+			scale(false);	// downscale if > 75% of the array is empty
+		return first;
 	}
 
 	public int size() {
@@ -45,9 +48,9 @@ class ArrayHeapMinPQ<T> {
 	private T[] array_;
 	private int size_;
 	private int silent_size_;
-	private int pos_first_;
-	private int pos_last_;
 
+	/** recursively swaps an element with its parent as long
+	as its smaller than its parent */
 	private void pushUp(int pos) {
 		int parent_pos;
 		if (pos % 2 == 0) 
@@ -62,6 +65,7 @@ class ArrayHeapMinPQ<T> {
 		}
 	}
 
+	/** reverse of pushUp */
 	private void pushDown(int pos) {
 		int child1_pos = 2 * pos + 1;
 		int child2_pos = 2 * pos + 2;
@@ -84,6 +88,7 @@ class ArrayHeapMinPQ<T> {
 		}
 	}
 
+	/** helper for the contains() method */
 	private boolean containsHelper(T item, int pos) {
 		if (array_[pos] == item)
 			return true;
@@ -93,25 +98,12 @@ class ArrayHeapMinPQ<T> {
 				containsHelper(array_[pos * 2 + 2]));
 	}
 
-	private void upscale() {
-		silent_size_ *= 2;
+	/** helper function for rescaling the array */
+	private void scale(bool up=true) {
+		if (up) silent_size_ *= 2;
+		else silent_size_ /= 2;
 		T[] new_array = (T[]) new Object[silent_size_];
-		int new_begin = silent_size_ / 4;
-		for (int i = 0; i != size_; i++)
-			new_array[i + new_begin] = array_[i + pos_first_];
-		pos_first_ = new_begin;
-		pos_last_ = pos_first_ + size_;
+		System.arraycopy(array_, 0, new_array, 0, size_);
 		array_ = new_array;
 	}	
-
-	private void downscale() {
-		silent_size_ /= 2;
-		T[] new_array = (T[]) new Object[silent_size_];
-		int new_begin = silent_size_ / 4;
-		for (int i = 0; i != size_; i++)
-			new_array[i + new_begin] = array_[i + pos_first_];
-		pos_first_ = new_begin;
-		pos_last_ = pos_first_ + size_;
-		array_ = new_array;
-	}
 }
