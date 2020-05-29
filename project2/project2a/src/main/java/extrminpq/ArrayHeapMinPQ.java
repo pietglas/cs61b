@@ -21,14 +21,22 @@ class ArrayHeapMinPQ<T> {
 	}
 
 	public void add(T item) {
-		
+		array_[pos_last_] = item;
+		pos_last_++;
+		size_++;
+		pushUp(pos_last_ - 1);		
 	}
 
 	public T getSmallest() {
 		return array_[pos_first_];
 	}
 
-	public T removeSmallest();
+	public T removeSmallest() {
+		T first = getSmallest();
+		pos_last_--;
+		array_[0] = array_[pos_last_];
+		pushDown(0);
+	}
 
 	public int size() {
 		return size_;
