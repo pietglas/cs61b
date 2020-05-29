@@ -2,18 +2,11 @@ package extrminpq;
 
 class ExtrinsicArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 	public ExtrinsicArrayHeapMinPQ() {
-		array_ = (T[]) new Object[8];
-		size_ = 0;
-		pos_first_ = 2;
-		pos_last_ = 3;
+		
 	}
 
 	public ExtrinsicArrayHeapMinPQ(ExtrinsicArrayHeapMinPQ<T> other) {
-		System.arraycopy(other.array_, other.pos_first_, 
-			array_, other.pos_first_, other.size_);
-		size_ = other.size_;
-		pos_first_ = other.pos_first_;
-		pos_last_ = other.pos_last_;
+		
 	}
 
 	public boolean contains(T item) {
@@ -25,16 +18,20 @@ class ExtrinsicArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 	}
 
 	public T getSmallest() {
-		return array_[pos_first_];
+		return heap_.getSmallest();
 	}
 
-	public T removeSmallest();
+	public T removeSmallest() {
+		return heap_.removeSmallest();
+	}
 
 	public int size() {
-		return size_;
+		return heap_.size();
 	}
 
-	public void changePriority(T item, double priority);
+	public void changePriority(T item, double priority) {
+
+	}
 
 	private ArrayHeapMinPQ<T> heap_;
 } 

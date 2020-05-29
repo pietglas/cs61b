@@ -70,16 +70,20 @@ class ArrayHeapMinPQ<T> {
 		int child1_pos = 2 * pos + 1;
 		int child2_pos = 2 * pos + 2;
 		int minchild_pos;
+		// determine the smallest child, if there are two children 
 		if (child2_pos < size_) {
 			if (array_[child1_pos] < array_[child2_pos])
 				minchild_pos = child1_pos;
 			else
 				minchild_pos = child2_pos;
 		}
+		// case of 1 child
 		else if (child2_pos == size_) {
 			minchild_pos = child1_pos;
+		// return if there are no children 
 		else
 			return;
+		// swap parent with the smallest child if child < parent 
 		if (array_[pos] > array_[minchild_pos]) {
 			T temp = array_[pos];
 			array_[pos] = array_[minchild_pos];
@@ -90,10 +94,13 @@ class ArrayHeapMinPQ<T> {
 
 	/** helper for the contains() method */
 	private boolean containsHelper(T item, int pos) {
-		if (array_[pos] == item)
+		if (array_[pos].equals(item)) 
 			return true;
-		if (item < array_[pos] || pos_last_ <= pos)
+		// item cannot be in the heap if item is smaller than the current 
+		// node or pos is >= size_ 
+		if (item < array_[pos] || size_ <= pos) 
 			return false;
+		// if item > array_[pos] and pos < size_ we continue recursively
 		return Math.max(containsHelper(item, array_[pos * 2 + 1]), 
 				containsHelper(array_[pos * 2 + 2]));
 	}
