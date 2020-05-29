@@ -1,6 +1,6 @@
 package extrminpq;
 
-class ArrayHeapMinPQ<T> implements Deque<T> {
+class ArrayHeapMinPQ<T> {
 	public ArrayHeapMinPQ() {
 		array_ = (T[]) new Object[8];
 		size_ = 0;
@@ -20,8 +20,8 @@ class ArrayHeapMinPQ<T> implements Deque<T> {
 		return containsHelper(item, pos_first_);
 	}
 
-	public void add(T item, double priority) {
-
+	public void add(T item) {
+		
 	}
 
 	public T getSmallest() {
@@ -34,20 +34,46 @@ class ArrayHeapMinPQ<T> implements Deque<T> {
 		return size_;
 	}
 
-	public void changePriority(T item, double priority);
-
 	private T[] array_;
 	private int size_;
 	private int silent_size_;
 	private int pos_first_;
 	private int pos_last_;
 
-	private int pushUp() {
-
+	private void pushUp(int pos) {
+		int parent_pos;
+		if (pos % 2 == 0) 
+			parent_pos = pos / 2 - 1;
+		else
+			parent_pos = pos / 2;
+		if (array_[pos] < array_[parent_pos]) {
+			T temp = array_[parent_pos];
+			array_[parent_pos] = array_[pos];
+			array_[pos] = temp;
+			pushUp(parent_pos);
+		}
 	}
 
-	private int pushDown() {
-
+	private void pushDown(int pos) {
+		int child1_pos = 2 * pos + 1;
+		int child2_pos = 2 * pos + 2;
+		int minchild_pos;
+		if (child2_pos < size_) {
+			if (array_[child1_pos] < array_[child2_pos])
+				minchild_pos = child1_pos;
+			else
+				minchild_pos = child2_pos;
+		}
+		else if (child2_pos == size_) {
+			minchild_pos = child1_pos;
+		else
+			return;
+		if (array_[pos] > array_[minchild_pos]) {
+			T temp = array_[pos];
+			array_[pos] = array_[minchild_pos];
+			array_[minchild_pos] = temp;
+			pushDown(minchild_pos);
+		}
 	}
 
 	private boolean containsHelper(T item, int pos) {
