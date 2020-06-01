@@ -4,6 +4,9 @@ import java.util.NoSuchElementException;
 import java.util.IllegalArgumentException;
 import java.util.HashMap;
 
+/** Extrinsic minimum priority queue, implemented as a heap. When adding
+a new element, the client needs to specify the priority as a double value. 
+The lower the value, the higher the priority. */
 class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 	public ArrayHeapMinPQ() {
 		heap_ = (PriorityNode<T>[]) new Object[8];
@@ -11,7 +14,9 @@ class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 	}
 
 	public ArrayHeapMinPQ(ArrayHeapMinPQ<T> other) {
-		System.arraycopy(other.heap_, 0, heap_, 0, other.size_);
+		heap_ = (PriorityNode<T>[]) new Object[other.silent_size_];
+		for (int i = 0; i != other.size_; i++)
+			heap_[i] = new PriorityNode<>(other.heap_[i]);
 		for (HashMap.Entry<PriorityNode<T>, double> entry : other.items_.entrySet())
 			items_.put(entry.getKey(), entry.getValue());
 		size_ = other.size_;
@@ -48,10 +53,15 @@ class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 		return first;
 	}
 
+	/** returns the size of the priority queue */
 	public int size() {return size_;}
 
+	/** returns true iff the priority queue is empty */
 	public boolean empty() {return size_ == 0;}
 
+	/** changes the priority of an item in the priority queue. 
+	Throws an IllegalArgumentException if the queue does not contain
+	the item */ 
 	public void changePriority(T item, double priority) {
 		if (!items_.containsKey(item)) throw NoSuchElementException;
 		PriorityNode<T> node = new PriorityNode<>(item, items_.get(item));
@@ -124,21 +134,27 @@ class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 		if (up) silent_size_ *= 2;
 		else silent_size_ /= 2;
 		PriorityNode<T>[] new_heap = (PriorityNode<T>[]) new Object[silent_size_];
-		System.arraycopy(heap_, 0, new_heap, 0, size_);
+		for (int i = 0; i != other.size_; i++)
+			new_heap[i] = new PriorityNode<>(heap_[i].getData(), 
+								heap_[i].getPriority());
 		heap_ = new_heap;
 	}
 
+	/** helper function for changePriority() */
 	private void changePriorityHelper(PriorityNode<T> node, double priority,
 			int pos) {
 		if (node.equals(heap_[pos])) {
 			double old_priority = heap_[pos].getPriority();
 			heap_[pos].setPriority(priority);
+			// if the new priority is higher (i.e. the new double value lower),
+			// we possibly need to push the element up. Otherwise, we might need 
+			// to push it down. 
 			if (priority < old_priority)
 				pushUp(pos);
 			else
 				pushDown(pos);
 		}
-		else {
+		else { // keep searching until we find the element
 			int child1_pos = 2 * pos + 1;
 			int child2_pos = 2 * pos + 2;
 			if (node.getPriority() < heap_[pos].getPriority())
