@@ -69,6 +69,8 @@ class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 	}
 
 	private PriorityNode<T>[] heap_;
+	// library for the items and their priorities, to ensure 
+	// that add() and contain() run in logarithmic time
 	private HashMap<T item, double priority> items_;
 	private int size_;
 	private int silent_size_;
