@@ -6,5 +6,6 @@ public interface ExtrinsicMinPQ<T> {
 	public T getSmallest();
 	public T removeSmallest();
 	public int size();
+	public boolean empty();
 	public void changePriority(T item, double priority);
 }
